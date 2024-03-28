@@ -135,7 +135,7 @@ class PyFilter(object):
                 return self.blacklist(ip_address, log_msg=log_msg, ip_type=ip_type, country=country)
 
             if ip_address not in self.ip_dict[pattern_type]:
-                self.ip_dict[pattern_type][ip_address] = {"amount": 0, "last_request": None}
+                self.ip_dict[pattern_type][ip_address] = {"amount": 1, "last_request": None}
             self.check(ip_address, pattern_type, time_obj, ip_type)
 
     def check(self, ip_address, pattern_type, time_object, ip_type="v4"):
@@ -212,6 +212,8 @@ class PyFilter(object):
         blacklist_string = "{} -I INPUT -s {} -j {}".format(
             iptables_type, ip_address, self.settings["deny_type"]
         )
+        print(blacklist_string)
+        
         subprocess.call(blacklist_string.split())
         self.ip_blacklisted = True
 
